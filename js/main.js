@@ -1,6 +1,7 @@
 $(document).ready
 (function()
 {
+	//something
 	var login 	= $("#login");
 		main	= $("#main");
 
