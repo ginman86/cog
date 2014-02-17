@@ -8,13 +8,72 @@ $(document).ready
 		{
 			block1:
 			[
-				{english: "war", german:"krieg"}, 
-				{english: "hello", german:"gutentag!"}, 
-				{english: "percent", german:"prozent"}
+				{english: "time", german:"zeit"}, 
+				{english: "people", german:"leute"}, 
+				{english: "now", german:"jetzt"},
+				{english: "year", german:"jahr"}, 
+				{english: "work", german:"arbeit"}, 
+				{english: "free", german:"frei"},
+				{english: "here", german:"hier"}, 
+				{english: "back", german:"zurueck"},
+				{english: "company", german:"firma"}, 
+				{english: "contact", german:"kontakt"},
+				{english: "development", german:"bildung"}, 
+				{english: "full", german:"voll"},
+				{english: "service", german:"dienst"}, 
+				{english: "date", german:"datum"},
+				{english: "information", german:"auskunft"}, 
+				{english: "world", german:"welt"},
+				{english: "news", german:"zeitung"}, 
+				{english: "group", german:"gruppe"},
+				{english: "start", german:"anfang"}, 
+				{english: "support", german:"hilfe"}
 			],
 			block2:
 			[
-				1,2,3
+				{english: "", german:""}, 
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""}
+			],
+			block3:
+			[
+				{english: "", german:""}, 
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""},
+				{english: "", german:""}, 
+				{english: "", german:""}
 			]
 		};
 
