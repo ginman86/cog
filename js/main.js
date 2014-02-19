@@ -133,7 +133,7 @@ $(document).ready
 							{english: "lazy", german:"faul"},
 							{english: "saucer", german:"untertasse"}, 
 							{english: "onion", german:"zweibel"}
-						]
+						],
 						block3k:
 						[
 							{english: "leaf", german:"blatt", keyword:"The German for LEAF is BLATT. Imagine you use a leaf to BLOT an ink stain."}, 
