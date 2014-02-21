@@ -100,6 +100,15 @@ $(document).ready
 				{
 					main.hide();
 					success.show();
+					$.each
+					(answers, 
+					function(i, item)
+					{
+						console.log("Id: " + item.id);
+						console.log("Value: " + item.value);
+						console.log("UserId: " + item.userId);						
+					});
+					
 				}
 			}
 		}
