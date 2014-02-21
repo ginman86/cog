@@ -10,10 +10,50 @@ $(document).ready
 	//
 	//*********************************************
 	
-	var login 	= $("#login"),
-		main	= $("#main"),
-		data	= private.getData(),
+	var login 			= $("#login"),
+		main			= $("#main"),
+		success			= $("#success"),
+		data			= private.getData(),
+		answerInput     = $('.answerInput', main),
+		currentQuestion	= 0,
+		answers         = [],
+		userId			= "",		
 		mainScope;		
+
+	mainScope =
+	{
+		knownPhrase: 	$('.knownPhrase', main),
+		unknownPhrase: 	$('.unknownPhrase', main),
+		errorMessage:   $('.error', main),
+		bindPhrase:
+		function(phrase)
+		{
+			if (phrase)
+			{
+				mainScope.knownPhrase.html(phrase.english);
+				mainScope.unknownPhrase.html(phrase.german);				
+			}
+		},
+		validateAnswer:
+		function(item, answer)
+		{
+			if (answer) 
+			{				
+				mainScope.errorMessage.hide();
+				return true
+			}
+
+			mainScope.errorMessage.show();
+			return false;
+		},
+		checkAnswer:
+		function(item, answer)
+		{
+			return answer.toLowerCase() === item.german.toLowerCase();			
+		}
+	};
+
+	mainScope.bindPhrase(data.block1[currentQuestion]);
 
 	console.log()
 	$("#idInput").on
@@ -23,18 +63,9 @@ $(document).ready
 		{			
 			if ($(this).val() !== null && $(this).val() !== undefined && $(this).val().trim() !== "")
 			{
+				userId	=	$(this).val();
 				login.hide()
-				main.show();
-
-				$.each
-				(data.block1,
-					function(i, item)
-					{
-						console.log(item.english);
-						console.log(item.german);
-						mainScope.bindPhrase(item);
-					}
-				);
+				main.show();				
 			}
 			else
 			{
@@ -44,49 +75,66 @@ $(document).ready
 		}
 	});
 
-	mainScope =
+	answerInput.on
+	("keyup", function(e)
 	{
-		knownPhrase: 	$('.knownPhrase', $('#main')),
-		unknownPhrase: 	$('.unknownPhrase', $('#main')),
-		bindPhrase:
-		function(phrase)
+		if (e.keyCode == 13) //enter key
 		{
-			if (phrase)
+			if (mainScope.validateAnswer(data.block1[currentQuestion], $(this).val()))
 			{
-				mainScope.knownPhrase.append('<br/>'+ phrase.english);
-				mainScope.unknownPhrase.append('<br/>'+ phrase.german);				
+				answers.push
+				({
+					id:    	data.block1[currentQuestion].id,
+					value: 	mainScope.checkAnswer(data.block1[currentQuestion], $(this).val()),
+					userId: userId
+				});
+
+				$(this).val('');
+				currentQuestion += 1;
+				//save answer
+				if (data.block1.length > currentQuestion)
+				{
+					mainScope.bindPhrase(data.block1[currentQuestion]);
+				}
+				else
+				{
+					main.hide();
+					success.show();
+				}
 			}
 		}
-	};
+	}
+	);	
 });
 
 	var private =
 	{
+
 		getData:
 		function()
 		{
 			return {	block1:						
 						[
-							{english: "time", german:"zeit"}, 
-							{english: "people", german:"leute"}, 
-							{english: "now", german:"jetzt"},
-							{english: "year", german:"jahr"}, 
-							{english: "work", german:"arbeit"}, 
-							{english: "free", german:"frei"},
-							{english: "here", german:"hier"}, 
-							{english: "back", german:"zurueck"},
-							{english: "company", german:"firma"}, 
-							{english: "contact", german:"kontakt"},
-							{english: "development", german:"bildung"}, 
-							{english: "full", german:"voll"},
-							{english: "service", german:"dienst"}, 
-							{english: "date", german:"datum"},
-							{english: "information", german:"auskunft"}, 
-							{english: "world", german:"welt"},
-							{english: "news", german:"zeitung"}, 
-							{english: "group", german:"gruppe"},
-							{english: "start", german:"anfang"}, 
-							{english: "support", german:"hilfe"}
+							{id: "7e53d904-0584-47f6-9dc4-5f5b2bd1857f", english: "time", german:"zeit"}, 
+							{id: "", english: "people", german:"leute"}, 
+							{id: "", english: "now", german:"jetzt"},
+							{id: "", english: "year", german:"jahr"}, 
+							{id: "", english: "work", german:"arbeit"}, 
+							{id: "", english: "free", german:"frei"},
+							{id: "", english: "here", german:"hier"}, 
+							{id: "", english: "back", german:"zurueck"},
+							{id: "", english: "company", german:"firma"}, 
+							{id: "", english: "contact", german:"kontakt"},
+							{id: "", english: "development", german:"bildung"}, 
+							{id: "", english: "full", german:"voll"},
+							{id: "", english: "service", german:"dienst"}, 
+							{id: "", english: "date", german:"datum"},
+							{id: "", english: "information", german:"auskunft"}, 
+							{id: "", english: "world", german:"welt"},
+							{id: "", english: "news", german:"zeitung"}, 
+							{id: "", english: "group", german:"gruppe"},
+							{id: "", english: "start", german:"anfang"}, 
+							{id: "", english: "support", german:"hilfe"}
 						],
 						block2:
 						[
