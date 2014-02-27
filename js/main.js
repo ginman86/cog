@@ -15,7 +15,10 @@ $(document).ready
 		success			= $("#success"),
 		data			= private.getData(),
 		answerInput     = $('.answerInput', main),
+		program 		= private.programCode()["1"],
 		currentQuestion	= 0,
+		totalIterations	= program.length,
+		currentIteration= 1,		
 		answers         = [],
 		userId			= "",		
 		mainScope;		
@@ -53,7 +56,7 @@ $(document).ready
 		}
 	};
 
-	mainScope.bindPhrase(data.block1[currentQuestion]);
+	mainScope.bindPhrase(data["block" + program[currentIteration - 1].block][currentQuestion]);
 
 	console.log()
 	$("#idInput").on
@@ -63,13 +66,14 @@ $(document).ready
 		{			
 			if ($(this).val() !== null && $(this).val() !== undefined && $(this).val().trim() !== "")
 			{
+				$(".error", login).hide();
 				userId	=	$(this).val();
 				login.hide()
 				main.show();				
 			}
 			else
 			{
-				$(".error").show();
+				$(".error", login).show();
 			}
 
 		}
@@ -80,13 +84,15 @@ $(document).ready
 	{
 		if (e.keyCode == 13) //enter key
 		{
-			if (mainScope.validateAnswer(data.block1[currentQuestion], $(this).val()))
+			if (mainScope.validateAnswer(data["block" + program[currentIteration -1].block][currentQuestion], $(this).val()))
 			{
 				answers.push
 				({
-					id:    	data.block1[currentQuestion].id,
-					value: 	mainScope.checkAnswer(data.block1[currentQuestion], $(this).val()),
-					userId: userId
+					id:    		data["block" + program[currentIteration -1].block][currentQuestion].id,
+					value: 		mainScope.checkAnswer(data["block" + program[currentIteration- 1].block][currentQuestion], $(this).val()),
+					userId: 	userId,
+					response: 	$(this).val()
+
 				});
 
 				$(this).val('');
@@ -94,21 +100,30 @@ $(document).ready
 				//save answer
 				if (data.block1.length > currentQuestion)
 				{
-					mainScope.bindPhrase(data.block1[currentQuestion]);
+					mainScope.bindPhrase(data["block" + program[currentIteration -1].block][currentQuestion]);					
 				}
 				else
 				{
-					main.hide();
-					success.show();
-					$.each
-					(answers, 
-					function(i, item)
+					currentIteration += 1;					
+					if (currentIteration > totalIterations)
 					{
-						console.log("Id: " + item.id);
-						console.log("Value: " + item.value);
-						console.log("UserId: " + item.userId);						
-					});
-					
+						main.hide();
+						success.show();
+						$.each
+						(answers, 
+						function(i, item)
+						{
+							console.log("Id: " + item.id);
+							console.log("Value: " + item.value);
+							console.log("UserId: " + item.userId);						
+							console.log("Response: " + item.response);
+						});
+					}
+					else
+					{
+						currentQuestion = 0;
+						mainScope.bindPhrase(data["block" + program[currentIteration- 1].block][currentQuestion]);
+					}
 				}
 			}
 		}
@@ -117,8 +132,27 @@ $(document).ready
 });
 
 	var private =
-	{
-
+	{		
+		programCode:
+		function()
+		{
+			return { 1: 
+					[
+						{
+							block: 	2,
+							mode:   "study"
+						},
+						{
+							block: 	2,
+							mode:   "test"
+						},
+						{
+							block: 	1,
+							mode:   "study"
+						},
+					]
+				}
+		},
 		getData:
 		function()
 		{
