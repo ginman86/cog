@@ -10,19 +10,27 @@ $(document).ready
 	//
 	//*********************************************
 	
-	var login 			= $("#login"),
-		main			= $("#main"),
-		success			= $("#success"),
-		data			= private.getData(),
-		answerInput     = $('.answerInput', main),
-		program 		= private.programCode()["1"],
-		currentQuestion	= 0,
-		totalIterations	= program.length,
-		currentIteration= 1,		
-		answers         = [],
-		userId			= "",		
-		mainScope;		
-
+	var 		global, mainScope, local; 
+	global:
+	{
+		data:			 	proto.getData(),
+		currentQuestion:	0,		
+		currentIteration: 	1,		
+		answers:          	[],
+		userId:			 	""		
+	};
+	pages:
+	{
+		login: 				$("#login"),
+		main: 				$("#main"),
+		success: 			$("#success"),		
+		answerInput:      	$('.answerInput', main),
+	},
+	options:
+	{
+		program: 		 	proto.programCode()["1"],
+		totalIterations:	program.length,
+	};
 	mainScope =
 	{
 		knownPhrase: 	$('.knownPhrase', main),
@@ -53,85 +61,110 @@ $(document).ready
 		function(item, answer)
 		{
 			return answer.toLowerCase() === item.german.toLowerCase();			
-		}
+		},
+		showMain:
+		function(id)
+		{
+			$(".error", login).hide();
+			userId	=	id;
+			main.show();
+		},		
 	};
-
-	mainScope.bindPhrase(data["block" + program[currentIteration - 1].block][currentQuestion]);
-
-	console.log()
-	$("#idInput").on
-	("keyup", function(e)
+	local:
 	{
-		if (e.keyCode == 13) //enter key
-		{			
-			if ($(this).val() !== null && $(this).val() !== undefined && $(this).val().trim() !== "")
+		processAnswer:
+		function(iteration, question, value)
+		{
+			var currentItem = local.getCurrentItem(iteration, question);
+			global.answers.push
+			({
+				id:    		currentItem.id,
+				value: 		mainScope.checkAnswer(currentItem, value),
+				userId: 	userId,
+				response: 	value
+			});
+		},
+		showNextQuestion:
+		function()
+		{
+			global.currentQuestion += 1;
+			//save answer
+			if (data.block1.length > global.currentQuestion)
 			{
-				$(".error", login).hide();
-				userId	=	$(this).val();
-				login.hide()
-				main.show();				
+				mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));					
 			}
 			else
 			{
-				$(".error", login).show();
-			}
-
-		}
-	});
-
-	answerInput.on
-	("keyup", function(e)
-	{
-		if (e.keyCode == 13) //enter key
-		{
-			if (mainScope.validateAnswer(data["block" + program[currentIteration -1].block][currentQuestion], $(this).val()))
-			{
-				answers.push
-				({
-					id:    		data["block" + program[currentIteration -1].block][currentQuestion].id,
-					value: 		mainScope.checkAnswer(data["block" + program[currentIteration- 1].block][currentQuestion], $(this).val()),
-					userId: 	userId,
-					response: 	$(this).val()
-
-				});
-
-				$(this).val('');
-				currentQuestion += 1;
-				//save answer
-				if (data.block1.length > currentQuestion)
+				global.currentIteration += 1;					
+				if (global.currentIteration > global.totalIterations)
 				{
-					mainScope.bindPhrase(data["block" + program[currentIteration -1].block][currentQuestion]);					
+					main.hide();
+					success.show();
+					$.each
+					(answers, 
+					function(i, item)
+					{
+						console.log("Id: " + item.id);
+						console.log("Value: " + item.value);
+						console.log("UserId: " + item.userId);						
+						console.log("Response: " + item.response);
+					});
 				}
 				else
 				{
-					currentIteration += 1;					
-					if (currentIteration > totalIterations)
+					currentQuestion = 0;
+					mainScope.bindPhrase(data["block" + program[currentIteration- 1].block][currentQuestion]);
+				}
+			}
+		},
+		getCurrentItem:
+		function(iteration, question)
+		{
+			return global.data["block" + global.program[iteration -1].block][question]
+		},
+		bindHandlers:
+		function()
+		{
+			$("#idInput").on
+			("keyup", function(e)
+			{
+				if (e.keyCode == 13) //enter key
+				{
+					if ($(this).val() !== null && $(this).val() !== undefined && $(this).val().trim() !== "")
 					{
-						main.hide();
-						success.show();
-						$.each
-						(answers, 
-						function(i, item)
-						{
-							console.log("Id: " + item.id);
-							console.log("Value: " + item.value);
-							console.log("UserId: " + item.userId);						
-							console.log("Response: " + item.response);
-						});
+						login.hide();
+						mainScope.showMain($(this).val());					
 					}
 					else
 					{
-						currentQuestion = 0;
-						mainScope.bindPhrase(data["block" + program[currentIteration- 1].block][currentQuestion]);
+						$(".error", login).show();
 					}
 				}
-			}
+			});
+			answerInput.on
+			("keyup", function(e)
+			{
+				if (e.keyCode == 13) //enter key
+				{
+					if (mainScope.validateAnswer(protected.getCurrentItem(currentIteration, currentQuestion), $(this).val()))
+					{
+						local.recordAnswer(currentIteration, currentQuestion, $(this).val());
+						$(this).val('');
+						local.showNextQuestion(currentIteration, currentQuestion, $(this).val());
+					}
+				}
+			});
 		}
 	}
-	);	
+	protected.bindHandlers();
+	mainScope.bindPhrase(data["block" + program[currentIteration - 1].block][currentQuestion]);
+	
+	console.log();
+
+		
 });
 
-	var private =
+	var proto =
 	{		
 		programCode:
 		function()
