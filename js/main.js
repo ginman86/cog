@@ -48,7 +48,7 @@ $(document).ready
 		function(phrase)
 		{
 			if (phrase)
-			{
+			{				
 				mainScope.knownPhrase.html(phrase.english);
 				mainScope.unknownPhrase.html(phrase.german);				
 			}
@@ -89,7 +89,8 @@ $(document).ready
 				id:    		currentItem.id,
 				value: 		mainScope.checkAnswer(currentItem, value),
 				userId: 	userId,
-				response: 	value
+				response: 	value,
+				mode:       options.program[global.currentIteration - 1].mode // may be redundant, consider using program id or similar.
 			});
 		},
 		showNextQuestion:
@@ -97,15 +98,15 @@ $(document).ready
 		{
 			global.currentQuestion += 1;
 			//save answer
-			if (options.program.length > global.currentQuestion)
+			if (local.getCurrentBlock(global.currentIteration).length > global.currentQuestion)
 			{
 				mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));					
 			}
 			else
 			{
-				global.currentIteration += 1;					
+				global.currentIteration += 1;
 				if (global.currentIteration > options.getTotalIterations())
-				{
+				{					
 					pages.main.hide();
 					pages.success.show();
 					$.each
@@ -116,10 +117,12 @@ $(document).ready
 						console.log("Value: " + item.value);
 						console.log("UserId: " + item.userId);						
 						console.log("Response: " + item.response);
+						console.log("Mode: " + item.mode);
 					});
 				}
 				else
 				{
+					pages.main.toggleClass("test", options.program[global.currentIteration - 1].mode === "test");
 					global.currentQuestion = 0;
 					mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));
 				}
@@ -128,7 +131,12 @@ $(document).ready
 		getCurrentItem:
 		function(iteration, question)
 		{
-			return global.data["block" + options.program[iteration -1].block][question];
+			return local.getCurrentBlock(iteration)[question];
+		},
+		getCurrentBlock:
+		function(iteration)
+		{
+			return global.data["block" + options.program[iteration - 1].block];
 		},
 		bindHandlers:
 		function()
@@ -184,10 +192,6 @@ $(document).ready
 						{
 							block: 	2,
 							mode:   "test"
-						},
-						{
-							block: 	1,
-							mode:   "study"
 						}
 					]
 				}
