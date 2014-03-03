@@ -26,18 +26,35 @@
 		*	Demographics Screen
 		*
 		-->
+
+
 		<div id="demographics" style="display:none">
 			<div>
-				<div class="loginContainer">				
-					<input type="text" name="id" id="idInput" class="textBox id" placeholder="ID #"></input>
-					<select>
+				<div class="loginContainer">
+
+					<span class="genderExpLabel">Gender: </span>
+					<br>
+					<select name="gender" class="textBox gender" placeholder="Gender">
 						<option>Male</option>
+						<option>Female</option>
 					</select>
 					<br>
-					<button class="newbie">First Time?</button>
+
+					<span class="germanExpLabel">Please select your current knowledge of the German language: </span>
+					<br>
+					<select name="germanExp" class="textBox germanExp" placeholder="Select:">
+						<option>None</option>
+						<option>Beginner</option>
+						<option>Intermediate</option>
+						<option>Advanced</option>
+						<option>Fluent</option>
+						<option>Native</option>
+					</select>
 				</div>
 			</div>
 		</div>
+
+
 		<!--
 		*
 		*	Main Screen
