@@ -10,32 +10,40 @@ $(document).ready
 	//
 	//*********************************************
 	
-	var 		global, mainScope, local; 
-	global:
+	var 		global, pages, options, mainScope, local; 
+	global =
 	{
 		data:			 	proto.getData(),
 		currentQuestion:	0,		
 		currentIteration: 	1,		
 		answers:          	[],
-		userId:			 	""		
+		userId:			 	""
 	};
-	pages:
+	pages =
 	{
 		login: 				$("#login"),
 		main: 				$("#main"),
 		success: 			$("#success"),		
-		answerInput:      	$('.answerInput', main),
-	},
-	options:
+		getAnswerInput:
+		function()
+		{
+			return $('.answerInput', this.main);
+		}
+	};
+	options =
 	{
 		program: 		 	proto.programCode()["1"],
-		totalIterations:	program.length,
+		getTotalIterations:	
+		function()
+		{			
+			return options.program.length;
+		}		
 	};
 	mainScope =
 	{
-		knownPhrase: 	$('.knownPhrase', main),
-		unknownPhrase: 	$('.unknownPhrase', main),
-		errorMessage:   $('.error', main),
+		knownPhrase: 	$('.knownPhrase', pages.main),
+		unknownPhrase: 	$('.unknownPhrase', pages.main),
+		errorMessage:   $('.error', pages.main),
 		bindPhrase:
 		function(phrase)
 		{
@@ -65,12 +73,12 @@ $(document).ready
 		showMain:
 		function(id)
 		{
-			$(".error", login).hide();
+			$(".error", pages.login).hide();
 			userId	=	id;
-			main.show();
-		},		
+			pages.main.show();
+		}
 	};
-	local:
+	local =
 	{
 		processAnswer:
 		function(iteration, question, value)
@@ -89,19 +97,19 @@ $(document).ready
 		{
 			global.currentQuestion += 1;
 			//save answer
-			if (data.block1.length > global.currentQuestion)
+			if (options.program.length > global.currentQuestion)
 			{
 				mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));					
 			}
 			else
 			{
 				global.currentIteration += 1;					
-				if (global.currentIteration > global.totalIterations)
+				if (global.currentIteration > options.getTotalIterations())
 				{
-					main.hide();
-					success.show();
+					pages.main.hide();
+					pages.success.show();
 					$.each
-					(answers, 
+					(global.answers, 
 					function(i, item)
 					{
 						console.log("Id: " + item.id);
@@ -112,15 +120,15 @@ $(document).ready
 				}
 				else
 				{
-					currentQuestion = 0;
-					mainScope.bindPhrase(data["block" + program[currentIteration- 1].block][currentQuestion]);
+					global.currentQuestion = 0;
+					mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));
 				}
 			}
 		},
 		getCurrentItem:
 		function(iteration, question)
 		{
-			return global.data["block" + global.program[iteration -1].block][question]
+			return global.data["block" + options.program[iteration -1].block][question];
 		},
 		bindHandlers:
 		function()
@@ -132,36 +140,34 @@ $(document).ready
 				{
 					if ($(this).val() !== null && $(this).val() !== undefined && $(this).val().trim() !== "")
 					{
-						login.hide();
+						pages.login.hide();
 						mainScope.showMain($(this).val());					
 					}
 					else
 					{
-						$(".error", login).show();
+						$(".error", pages.login).show();
 					}
 				}
 			});
-			answerInput.on
+			pages.getAnswerInput().on
 			("keyup", function(e)
 			{
 				if (e.keyCode == 13) //enter key
 				{
-					if (mainScope.validateAnswer(protected.getCurrentItem(currentIteration, currentQuestion), $(this).val()))
+					if (mainScope.validateAnswer(local.getCurrentItem(global.currentIteration, global.currentQuestion), $(this).val()))
 					{
-						local.recordAnswer(currentIteration, currentQuestion, $(this).val());
+						local.processAnswer(global.currentIteration, global.currentQuestion, $(this).val());
 						$(this).val('');
-						local.showNextQuestion(currentIteration, currentQuestion, $(this).val());
+						local.showNextQuestion(global.currentIteration, global.currentQuestion, $(this).val());
 					}
 				}
 			});
 		}
 	}
-	protected.bindHandlers();
-	mainScope.bindPhrase(data["block" + program[currentIteration - 1].block][currentQuestion]);
+	local.bindHandlers();
+	mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));
 	
-	console.log();
-
-		
+	console.log();		
 });
 
 	var proto =
@@ -182,7 +188,7 @@ $(document).ready
 						{
 							block: 	1,
 							mode:   "study"
-						},
+						}
 					]
 				}
 		},
