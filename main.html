@@ -16,8 +16,13 @@
 				<div class="loginContainer">				
 					<input type="text" name="id" id="idInput" class="textBox id" placeholder="ID #"></input>
 					<br>
-					<button class="newbie">First Time?</button>
-					<span class="error" style="display:none">Please enter a valid id. If you need an id, please click "First Time?"</span>
+					<form id="daySelector">
+						<input type="radio" name="group1" class="day1" value="1" checked="true">Day 1<br>
+						<input type="radio" name="group1" class="day2" value="2">Day 2
+					</form>
+					<button class="button" id="start">Press start to play!</button>
+
+					<span class="error" style="display:none">Please enter a valid id. If you need an id, please see the RA.</span>
 				</div>
 			</div>
 		</div>
@@ -30,19 +35,22 @@
 
 		<div id="demographics" style="display:none">
 			<div>
-				<div class="loginContainer">
+				<div class="demographicsContainer">
 
 					<span class="genderExpLabel">Gender: </span>
 					<br>
-					<select name="gender" class="textBox gender" placeholder="Gender">
+					<select name="gender" class="gender" placeholder="Gender">
 						<option>Male</option>
 						<option>Female</option>
 					</select>
 					<br>
 
-					<span class="germanExpLabel">Please select your current knowledge of the German language: </span>
+					<input type="text" name="age" class="textBox age" placeholder="Age"></input>
 					<br>
-					<select name="germanExp" class="textBox germanExp" placeholder="Select:">
+
+					<span class="experienceLabel">Please select your current knowledge of the German language: </span>
+					<br>
+					<select name="experience" class="textBox experience" placeholder="Select:">
 						<option>None</option>
 						<option>Beginner</option>
 						<option>Intermediate</option>
@@ -50,6 +58,9 @@
 						<option>Fluent</option>
 						<option>Native</option>
 					</select>
+					<br>
+					<span class="error errorAge" style="display:none">Please enter a valid Age before continuing.</span><br>
+					<button id="continue" class="button continue">Continue</button>
 				</div>
 			</div>
 		</div>

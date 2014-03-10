@@ -17,13 +17,20 @@ $(document).ready
 		currentQuestion:	0,		
 		currentIteration: 	1,		
 		answers:          	[],
-		userId:			 	""
+		user:			 	
+		{
+			id: 			"",
+			age: 			0,
+			gender:  		"",
+			experience:    	""
+		}
 	};
 	pages =
 	{
 		login: 				$("#login"),
 		main: 				$("#main"),
-		success: 			$("#success"),		
+		success: 			$("#success"),
+		demographics:    	$("#demographics"),
 		getAnswerInput:
 		function()
 		{
@@ -71,10 +78,9 @@ $(document).ready
 			return answer.toLowerCase() === item.german.toLowerCase();			
 		},
 		showMain:
-		function(id)
+		function()
 		{
-			$(".error", pages.login).hide();
-			userId	=	id;
+			$(".error", pages.login).hide();			
 			pages.main.show();
 		}
 	};
@@ -88,7 +94,7 @@ $(document).ready
 			({
 				id:    		currentItem.id,
 				value: 		mainScope.checkAnswer(currentItem, value),
-				userId: 	userId,
+				userId: 	global.user.id,
 				response: 	value,
 				mode:       options.program[global.currentIteration - 1].mode // may be redundant, consider using program id or similar.
 			});
@@ -115,7 +121,7 @@ $(document).ready
 					{
 						console.log("Id: " + item.id);
 						console.log("Value: " + item.value);
-						console.log("UserId: " + item.userId);						
+						console.log("UserId: " + item.user.id);						
 						console.log("Response: " + item.response);
 						console.log("Mode: " + item.mode);
 					});
@@ -141,22 +147,10 @@ $(document).ready
 		bindHandlers:
 		function()
 		{
-			$("#idInput").on
-			("keyup", function(e)
-			{
-				if (e.keyCode == 13) //enter key
-				{
-					if ($(this).val() !== null && $(this).val() !== undefined && $(this).val().trim() !== "")
-					{
-						pages.login.hide();
-						mainScope.showMain($(this).val());					
-					}
-					else
-					{
-						$(".error", pages.login).show();
-					}
-				}
-			});
+			$("#idInput").on("keyup", local.start);
+			$("#start").on("click", local.start);
+			$("#continue").on("click", local.demographicsContinue);
+			$("#demographics").on("keyup", local.demographicsContinue);
 			pages.getAnswerInput().on
 			("keyup", function(e)
 			{
@@ -170,6 +164,53 @@ $(document).ready
 					}
 				}
 			});
+		},
+		demographicsContinue:
+		function(e)
+		{
+			if (e.keyCode == 13 || e.keyCode === undefined) //enter key
+			{
+				var ageInput = $('.age', pages.demographics);
+				if (ageInput.val() === null || ageInput.val() === undefined || ageInput.val() === "")
+				{
+					$('.error', pages.demographics).show();
+				} 
+				else
+				{
+					$('.error', pages.demographics).hide();				
+					global.user.gender 		= $('.gender', pages.demographics).val();
+					global.user.age 		= ageInput.val();
+					global.user.experience 	= $('.experience', pages.demographics).val();
+					pages.demographics.hide();
+					mainScope.showMain();	
+				}
+			}
+		},
+		start:
+		function(e)
+		{
+			if (e.keyCode == 13 || e.keyCode === undefined) //enter key
+			{
+				var idInput = $("#idInput");
+				if (idInput.val() !== null && idInput.val() !== undefined && idInput.val().trim() !== "")
+				{
+					global.user.id		=	idInput.val();
+					if ($('input:radio[name=group1]:checked').val() === "2")
+					{
+						pages.login.hide();
+						mainScope.showMain(idInput.val());
+					}
+					else if ($('input:radio[name=group1]:checked').val() === "1")
+					{
+						pages.login.hide();
+						pages.demographics.show();						
+					}
+				}
+				else
+				{
+					$(".error", pages.login).show();
+				}
+			}
 		}
 	}
 	local.bindHandlers();
