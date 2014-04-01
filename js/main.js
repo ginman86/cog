@@ -206,14 +206,17 @@ $(document).ready
 		exportData:
 		function(data)
 		{
-			var csv = "Id,Value,UserId,Response,Mode\r\n";
+			var csv = "UserId,Gender,Age,Experience\r\n";
 
+			csv	+= global.user.id + "," + global.user.gender + "," + global.user.age + "," + global.user.experience;
+			csv += "\r\n\r\n";
+			csv += "Id,Value,UserId,Response,Mode\r\n";
 			$.each
 			(data, 
 			function(i, item)
 			{
 				csv += item.id + "," + item.value + "," + item.user.id + "," + item.response + "," + item.mode;
-				csv += "\r\n";							
+				csv += "\r\n";
 			});
 
 			var exportLink = document.createElement('a');
