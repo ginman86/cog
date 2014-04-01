@@ -75,7 +75,7 @@ $(document).ready
 		checkAnswer:
 		function(item, answer)
 		{
-			return answer.toLowerCase() === item.german.toLowerCase();			
+			return (answer.toLowerCase() === item.german.toLowerCase()) * 1;			
 		},
 		showMain:
 		function()
