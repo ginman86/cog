@@ -39,7 +39,7 @@ $(document).ready
 	};
 	options =
 	{
-		program: 		 	proto.programCode()["1"],
+		program: 		 	proto.programCode()["1"],		
 		getTotalIterations:	
 		function()
 		{			
@@ -94,7 +94,7 @@ $(document).ready
 			({
 				id:    		currentItem.id,
 				value: 		mainScope.checkAnswer(currentItem, value),
-				userId: 	global.user.id,
+				user: 		{id: global.user.id},
 				response: 	value,
 				mode:       options.program[global.currentIteration - 1].mode // may be redundant, consider using program id or similar.
 			});
@@ -115,16 +115,7 @@ $(document).ready
 				{					
 					pages.main.hide();
 					pages.success.show();
-					$.each
-					(global.answers, 
-					function(i, item)
-					{
-						console.log("Id: " + item.id);
-						console.log("Value: " + item.value);
-						console.log("UserId: " + item.user.id);						
-						console.log("Response: " + item.response);
-						console.log("Mode: " + item.mode);
-					});
+					local.exportData(global.answers);					
 				}
 				else
 				{
@@ -211,6 +202,27 @@ $(document).ready
 					$(".error", pages.login).show();
 				}
 			}
+		},
+		exportData:
+		function(data)
+		{
+			var csv = "Id,Value,UserId,Response,Mode\r\n";
+
+			$.each
+			(data, 
+			function(i, item)
+			{
+				csv += item.id + "," + item.value + "," + item.user.id + "," + item.response + "," + item.mode;
+				csv += "\r\n";							
+			});
+
+			var exportLink = document.createElement('a');
+		    exportLink.setAttribute('href', 'data:text/csv;base64,' + window.btoa(csv));
+		    exportLink.appendChild(document.createTextNode(global.user.id + '_results.csv'));
+
+		    $(exportLink).attr('download', global.user.id + '_results.csv');	//chrome ftw.
+
+		    $('.results', pages.success).html(exportLink);
 		}
 	}
 	local.bindHandlers();
@@ -229,10 +241,6 @@ $(document).ready
 						{
 							block: 	2,
 							mode:   "study"
-						},
-						{
-							block: 	2,
-							mode:   "test"
 						}
 					]
 				}
