@@ -1,7 +1,15 @@
 <html>
 	<head>		
 		<script src="js/jquery.js"></script>
-		<script src="js/main.js" type="text/javascript"></script>		
+		<script src="js/main.js" type="text/javascript"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="http//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>		
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<title>Cog</title>
 	</head>
@@ -11,31 +19,47 @@
 		*	Login Screen
 		*
 		-->
-		<div id="login" class="content">
-			<div>
-				<div class="loginContainer">				
-					<input type="text" name="id" id="idInput" class="textBox id" placeholder="ID #"></input>
+		<div class="body">
+			<div id="login" class="content panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Cog</h3>
+				</div>				
+				<div class="panel-body loginContainer">				
+					<input type="text" name="id" id="idInput" class="form-control textBox id" placeholder="ID #"></input>
 					<br>
-					<form id="daySelector">
-						<input type="radio" name="group1" class="day1" value="1" checked="true">Day 1<br>
-						<input type="radio" name="group1" class="day2" value="2">Day 2
+				<!--
+					<form id="daySelector">					
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-primary">    
+								<input type="radio" name="group1" class="day1" value="1" checked="true">Day 1<br>
+							</label>
+							<label class="btn btn-primary">
+					    		<input type="radio" name="group1" class="day2" value="2">Day 2
+						 	</label>
+						</div>
 					</form>
-					<button class="button" id="start">Press start to play!</button>
+				-->
+					<form id="daySelector">
+						<input type="radio" name="group1" class="day1" value="1" checked="true"> Day 1<br>
+						<input type="radio" name="group1" class="day2" value="2"> Day 2
+					</form>
+					<button class="button btn-sm btn-primary" id="start">Press start to play!</button>
 
 					<span class="error" style="display:none">Please enter a valid id. If you need an id, please see the RA.</span>
-				</div>
+				</div>				
 			</div>
-		</div>
-		<!--
-		*
-		*	Demographics Screen
-		*
-		-->
+			<!--
+			*
+			*	Demographics Screen
+			*
+			-->
 
 
-		<div id="demographics" style="display:none">
-			<div>
-				<div class="demographicsContainer">
+			<div id="demographics" class="content panel panel-primary" style="display:none">
+				<div class="panel-heading">
+					<h3 class="panel-title">Cog</h3>
+				</div>		
+				<div class="demographicsContainer panel-body">
 
 					<span class="genderExpLabel">Gender: </span>
 					<br>
@@ -45,7 +69,7 @@
 					</select>
 					<br>
 
-					<input type="text" name="age" class="textBox age" placeholder="Age"></input>
+					<input type="text" name="age" class="textBox age form-control" placeholder="Age"></input>
 					<br>
 
 					<span class="experienceLabel">Please select your current knowledge of the German language: </span>
@@ -61,34 +85,41 @@
 					<br>
 					<span class="error errorAge" style="display:none">Please enter a valid Age before continuing.</span><br>
 					<button id="continue" class="button continue">Continue</button>
+				</div>				
+			</div>
+			<!--
+			*
+			*	Main Screen
+			*
+			-->
+			<div id="main" style="display:none">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Cog</h3>
+					</div>
+					<div class="panel-body center-content">
+						<div class="questions">
+							<span class="questionText knownPhrase">*war</span>
+							<span class="divider">+</span>
+							<span class="questionText unknownPhrase">*krieg</span><br>
+						</div>
+						<input type="text" class="answerInput form-control"></input>
+
+						<span class="error" style="display:none">Who is your daddy and what does he do? Please enter an answer.</span>
+					</div>
 				</div>
 			</div>
-		</div>
-
-
-		<!--
-		*
-		*	Main Screen
-		*
-		-->
-		<div id="main" style="display:none">
-			<span class="questionText knownPhrase">*war</span>
-			<span class="divider">+</span>
-			<span class="questionText unknownPhrase">*krieg</span><br>
-			<input type="text" class="answerInput"></input>
-
-			<span class="error" style="display:none">Who is your daddy and what does he do? Please enter an answer.</span>
-		</div>
-		<!--
-		*
-		*	Success Screen
-		*
-		-->
-		<div id="success" style="display:none">
-			<span class="successPage">Sehr gut!<br>Thank you for participating. Please leave the browser open and see the attendant.
-			</span>
-			<br>			
-			<div class="results" download=""></div>
+			<!--
+			*
+			*	Success Screen
+			*
+			-->
+			<div id="success" style="display:none">
+				<span class="successPage">Sehr gut!<br>Thank you for participating. Please leave the browser open and see the attendant.
+				</span>
+				<br>			
+				<div class="results" download=""></div>
+			</div>
 		</div>
 	<body>
 </html>
