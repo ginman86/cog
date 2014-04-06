@@ -81,7 +81,8 @@ $(document).ready
 		showMain:
 		function()
 		{
-			$(".error", pages.login).hide();			
+			$(".error", pages.login).hide();
+			local.bindBlock();
 			pages.main.show();
 		}
 	};
@@ -112,19 +113,25 @@ $(document).ready
 			else
 			{
 				global.currentIteration += 1;
+				//finished
 				if (global.currentIteration > options.getTotalIterations())
 				{					
 					pages.main.hide();
 					pages.success.show();
 					local.exportData(global.answers);					
 				}
-				else
+				else //transition to new block
 				{
-					pages.main.toggleClass("test", options.program[global.currentIteration - 1].mode === "test");
-					global.currentQuestion = 0;
-					mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));
+					local.bindBlock();
 				}
 			}
+		},
+		bindBlock:
+		function()
+		{
+			pages.main.toggleClass("test", options.program[global.currentIteration - 1].mode === "test");
+			global.currentQuestion = 0;
+			mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));
 		},
 		getCurrentItem:
 		function(iteration, question)
@@ -199,8 +206,6 @@ $(document).ready
 						options.program = proto.programCode()["1"];
 						pages.demographics.show();						
 					}
-
-
 				}
 				else
 				{
@@ -233,10 +238,7 @@ $(document).ready
 		    $('.results', pages.success).html(exportLink);
 		}
 	}
-	local.bindHandlers();
-	mainScope.bindPhrase(local.getCurrentItem(global.currentIteration, global.currentQuestion));
-	
-	console.log();		
+	local.bindHandlers();	
 });
 
 	var proto =
