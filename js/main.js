@@ -37,9 +37,10 @@ $(document).ready
 			return $('.answerInput', this.main);
 		}
 	};
+
 	options =
 	{
-		program: 		 	proto.programCode()["1"],		
+		program: 		 	null,		
 		getTotalIterations:	
 		function()
 		{			
@@ -189,13 +190,17 @@ $(document).ready
 					if ($('input:radio[name=group1]:checked').val() === "2")
 					{
 						pages.login.hide();
+						options.program = proto.programCode()["2"];
 						mainScope.showMain(idInput.val());
 					}
 					else if ($('input:radio[name=group1]:checked').val() === "1")
 					{
 						pages.login.hide();
+						options.program = proto.programCode()["1"];
 						pages.demographics.show();						
 					}
+
+
 				}
 				else
 				{
@@ -245,8 +250,27 @@ $(document).ready
 							block: 	2,
 							mode:   "study"
 						}
+					],
+					2: 
+					[
+						{
+							block: 	1,
+							mode:   "test"
+						},
+
+						{
+							block: 	2,
+							mode:   "test"
+						},
+
+						{
+							block: 	3,
+							mode:   "test"
+						}
 					]
 				}
+
+
 		},
 		getData:
 		function()
