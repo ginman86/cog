@@ -248,10 +248,72 @@ $(document).ready
 		{
 			return { 1: 
 					[
+						// Condition 1 testing effect
+						
+						{
+							block: 	1,
+							mode:   "study"
+						},
+
+						{
+							block: 	1,
+							mode:   "test"
+						},
+
+						{
+							block: 	1,
+							mode:   "study"
+						},
+
+						{
+							block: 	1,
+							mode:   "test"
+						},
+
+						{
+							block: 	1,
+							mode:   "study"
+						},
+
+						{
+							block: 	1,
+							mode:   "test"
+						},
+
+						//Condition 2 Rote
+
+						{
+							block: 	2,
+							mode:   "study"
+						},
+
+						{
+							block: 	2,
+							mode:   "study"
+						},
+
+						{
+							block: 	2,
+							mode:   "study"
+						},
+
+						{
+							block: 	2,
+							mode:   "study"
+						},
+
+						{
+							block: 	2,
+							mode:   "study"
+						},
+
 						{
 							block: 	2,
 							mode:   "study"
 						}
+
+
+
 					],
 					2: 
 					[
